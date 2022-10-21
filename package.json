@@ -39,5 +39,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@yume-chan/adb-credential-web": "^0.0.17",
+    "@yume-chan/stream-extra": "^0.0.17",
+    "mobx": "^6.6.2"
   }
 }
