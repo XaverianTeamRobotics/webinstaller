@@ -151,7 +151,7 @@ class ProgressStream extends InspectStream<Uint8Array> {
 
 export default class App extends Component {
 
-  constructor(props) {
+  constructor(props: {} | Readonly<{}>) {
     super(props)
     this.handleUpdate = this.handleUpdate.bind(this)
   }
@@ -201,7 +201,7 @@ export default class App extends Component {
             Upload Progress: <p style={{"fontWeight":"bold"}}>{(uploadStatus.value ?? 0) * 100 }%</p>
           </div>
         </div>
-        {(webUSBBackend !== undefined) 
+        {(webUSB !== undefined) 
           ? <div> <button onClick={doUpload}> Start Upload </button> </div>
           : <div> <h2> Connect a device to start upload </h2> </div>
         }
