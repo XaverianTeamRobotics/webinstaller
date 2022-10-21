@@ -150,6 +150,12 @@ class ProgressStream extends InspectStream<Uint8Array> {
 }
 
 export default class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.handleUpdate = this.handleUpdate.bind(this)
+  }
+
   handleUpdate() {
     this.forceUpdate()
     console.log("Updated UI")
@@ -157,7 +163,6 @@ export default class App extends Component {
 
   render() {
     const uploadStatus = progress
-    const webUSBBackend = webUSB
     var uploadStage: String
     switch (uploadStatus.stage) {
       case Stage.Ready:
