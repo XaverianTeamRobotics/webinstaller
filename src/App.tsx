@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import './App.css';
 import { Adb, ADB_SYNC_MAX_PACKET_SIZE, AdbPacketData, AdbPacketInit } from '@yume-chan/adb';
@@ -13,10 +13,10 @@ var webUSB: AdbWebUsbBackend | undefined = undefined
 var stream: AdbWebUsbBackendStream | undefined = undefined
 var device: Adb | undefined = undefined
 
-async function connectAdbDevice() {
+async function connectAdbDevice(): Promise<AdbWebUsbBackend | undefined> {
   console.log("connectAdbDevice called");
   (document.getElementById("connectionStatus") as HTMLElement).innerHTML = "Connecting...";
-  AdbWebUsbBackend.requestDevice().then(async (output) => {
+  await AdbWebUsbBackend.requestDevice().then((output) => {
     if (output !== undefined) {
       console.log("User connected device");
       webUSB = output;;
@@ -27,42 +27,45 @@ async function connectAdbDevice() {
       stream = undefined;
       (document.getElementById("connectionStatus") as HTMLElement).innerHTML = "No device connected";
     }
-    console.log(webUSB)
+    return webUSB
   })
+  console.log(webUSB)
+  return webUSB;
 }
 
-async function doUpload() {
+async function doUpload(): Promise<Boolean> {
   let readable: ReadableStream<AdbPacketData>;
-      let writable: WritableStream<AdbPacketInit>;
-      stream = await webUSB!.connect();
+  let writable: WritableStream<AdbPacketInit>;
+  stream = await webUSB!.connect();
 
-      // Use `InspectStream`s to intercept and log packets
-      readable = stream.readable
-          .pipeThrough(
-              new InspectStream(packet => {
-                  console.log('in ' + packet);
-              })
-          );
-
-      writable = pipeFrom(
-          stream.writable,
-          new InspectStream((packet: AdbPacketInit) => {
-            console.log('out ' + packet);
+  // Use `InspectStream`s to intercept and log packets
+  readable = stream.readable
+      .pipeThrough(
+          new InspectStream(packet => {
+              console.log('in ' + packet);
           })
       );
 
-      device = await Adb.authenticate(
-        { readable, writable },
-        CredentialStore,
-        undefined
-      );
+  writable = pipeFrom(
+      stream.writable,
+      new InspectStream((packet: AdbPacketInit) => {
+        console.log('out ' + packet);
+      })
+  );
 
-      fetch('/TeamCode-debug.apk')
-        .then(res => res.blob()) // Gets the response and returns it as a blob
-        .then(blob => {
-          var file = new File([blob], "./bin/TeamCode-debug.apk")
-          uploadFile(file);
-        });
+  device = await Adb.authenticate(
+    { readable, writable },
+    CredentialStore,
+    undefined
+  );
+
+  fetch('/TeamCode-debug.apk')
+    .then(res => res.blob()) // Gets the response and returns it as a blob
+    .then(blob => {
+      var file = new File([blob], "./bin/TeamCode-debug.apk")
+      uploadFile(file);
+    });
+  return true;
 }
 
 enum Stage {
@@ -149,63 +152,33 @@ class ProgressStream extends InspectStream<Uint8Array> {
   }
 }
 
-export default class App extends Component {
-
-  constructor(props: {} | Readonly<{}>) {
-    super(props)
-    this.handleUpdate = this.handleUpdate.bind(this)
-  }
-
-  handleUpdate() {
-    this.forceUpdate()
-    console.log("Updated UI")
-  }
-
-  render() {
-    const uploadStatus = progress
-    var uploadStage: String
-    switch (uploadStatus.stage) {
-      case Stage.Ready:
-        uploadStage = "Ready";
-        break;
-      case Stage.Uploading:
-        uploadStage = "Uploading";
-        break;
-      case Stage.Installing:
-        uploadStage = "Installing";
-        break;
-      case Stage.Completed:
-        uploadStage = "Completed";
-        break;
-    }
-    return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Web Installer by Xaverian Team Robotics
-          </p>
-        </header>
-        <div className="rowC">
-          <h1 id="connectionStatus">
-              No device connected
-          </h1>
-          <button onClick={() => {connectAdbDevice(); this.handleUpdate()}}>
-              Connect to device
-          </button>
-        </div>
-        <div className='rowC'>
-          <div>
-            Upload Status: <p style={{"fontWeight":"bold"}}>{uploadStage}</p>
-          </div>
-          <div>
-            Upload Progress: <p style={{"fontWeight":"bold"}}>{(uploadStatus.value ?? 0) * 100 }%</p>
-          </div>
-        </div>
-        {(webUSB !== undefined) 
-          ? <div> <button onClick={doUpload}> Start Upload </button> </div>
-          : <div> <h2> Connect a device to start upload </h2> </div>
-        }
+export default function App() {
+  const [webUSBBackend, setWebUSBBackend] = useState(webUSB)
+  const [status, setStatus] = useState("Not Connected")
+  return (
+    <div className="App">
+      <header className="App-header">
+        <p>
+          Web Installer by Xaverian Team Robotics
+        </p>
+      </header>
+      <div className="rowC">
+        <h1 id="connectionStatus">
+            No device connected
+        </h1>
+        <button onClick={() => {connectAdbDevice().then((out) => { setWebUSBBackend(out) }); setStatus("Ready")}}>
+            Connect to device
+        </button>
       </div>
-    );
-  }
+      <div className='rowC'>
+        <p> Upload Status: </p>
+        <p style={{"fontWeight":"bold"}}>{status}</p>
+      </div>
+      { 
+        (webUSBBackend !== undefined)
+          ? <div> <button onClick={() => {setStatus("Uploading"); doUpload().then((out) => {setStatus("Done")})}}> Start Upload </button> </div>
+          : <div> <h2> Connect a device to start upload </h2> </div>
+      }
+    </div>
+  );
 }
