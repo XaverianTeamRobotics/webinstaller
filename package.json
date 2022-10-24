@@ -17,6 +17,7 @@
     "web-vitals": "^2.1.4",
     "@yume-chan/adb-credential-web": "^0.0.17",
     "@yume-chan/stream-extra": "^0.0.17",
+    "@yume-chan/adb-backend-webusb": "0.0.17",
     "mobx": "^6.6.2"
   },
   "scripts": {
