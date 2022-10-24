@@ -33,39 +33,48 @@ async function connectAdbDevice(): Promise<AdbWebUsbBackend | undefined> {
   return webUSB;
 }
 
-async function doUpload(): Promise<Boolean> {
-  let readable: ReadableStream<AdbPacketData>;
-  let writable: WritableStream<AdbPacketInit>;
-  stream = await webUSB!.connect();
+async function doUpload(): Promise<Boolean | undefined> {
+  try {
+    console.log(stream);
+    let readable: ReadableStream<AdbPacketData>;
+    let writable: WritableStream<AdbPacketInit>;
+    if (stream === undefined) {
+      stream = await webUSB!.connect();
+    }
 
-  // Use `InspectStream`s to intercept and log packets
-  readable = stream.readable
-      .pipeThrough(
-          new InspectStream(packet => {
-              console.log('in ' + packet);
-          })
+    // Use `InspectStream`s to intercept and log packets
+    readable = stream.readable
+        .pipeThrough(
+            new InspectStream(packet => {
+                console.log('in ' + packet);
+            })
+        );
+
+    writable = pipeFrom(
+        stream.writable,
+        new InspectStream((packet: AdbPacketInit) => {
+          console.log('out ' + packet);
+        })
+    );
+    
+    if (device === undefined) {
+      console.log(device)
+      device = await Adb.authenticate(
+        { readable, writable },
+        CredentialStore,
+        undefined
       );
+    }
 
-  writable = pipeFrom(
-      stream.writable,
-      new InspectStream((packet: AdbPacketInit) => {
-        console.log('out ' + packet);
-      })
-  );
-
-  device = await Adb.authenticate(
-    { readable, writable },
-    CredentialStore,
-    undefined
-  );
-
-  fetch('/TeamCode-debug.apk')
-    .then(res => res.blob()) // Gets the response and returns it as a blob
-    .then(blob => {
-      var file = new File([blob], "./bin/TeamCode-debug.apk")
-      uploadFile(file);
-    });
-  return true;
+    await fetch('./bin/TeamCode-debug.apk')
+      .then(res => res.blob()) // Gets the response and returns it as a blob
+      .then(blob => {
+        console.log(blob)
+        var file = new File([blob], "./bin/TeamCode-debug.apk")
+        uploadFile(file);
+      });
+    return true;
+  } catch(e) {alert("An error occured. Please see the console to see the exact error."); console.error(e)}
 }
 
 enum Stage {
@@ -106,7 +115,7 @@ async function uploadFile(file: File) {
     totalSize: file.size,
     value: 0,
   };
-  createFileStream(file)
+  await createFileStream(file)
     .pipeThrough(new ChunkStream(ADB_SYNC_MAX_PACKET_SIZE))
     .pipeThrough(new ProgressStream(action((uploaded) => {
       if (uploaded !== file.size) {
