@@ -52,5 +52,5 @@ jobs:
     - name: Transfer site contents
       run: |
         rm -rf ./FtcRobotController/HelpPage/apk/*
-        cp ./webinstaller/build/* ./FtcRobotController/HelpPage/apk
+        cp -r ./webinstaller/build/* ./FtcRobotController/HelpPage/apk
     - run: ls -laR ./FtcRobotController/HelpPage/apk
