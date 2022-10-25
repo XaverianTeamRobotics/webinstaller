@@ -60,7 +60,7 @@ jobs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add -f ./HelpPage/apk/*
-        git commit --allow-empty -m "Build Site" ./HelpPage/apk/*
+        git commit --allow-empty -m "Copy Site" ./HelpPage/apk/*
     
     - name: Push changes
-      run: git push https://XaverianTeamRobotics:${{ secrets.GITHUB_TOKEN }}@github.com/scuzzlebuzzle/XaverianTeamRobotics.git
+      run: git push
