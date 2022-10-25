@@ -62,5 +62,8 @@ jobs:
         git add -f ./HelpPage/apk/*
         git commit --allow-empty -m "Copy Site" ./HelpPage/apk/*
     
+    - run: pwd
+    
     - name: Push changes
-      run: git push
+      run: |
+        git push
