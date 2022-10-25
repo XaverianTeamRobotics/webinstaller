@@ -67,4 +67,4 @@ jobs:
         cd FtcRobotController
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git push https://XaverianTeamRobotics:${{ secrets.GITHUB_TOKEN }}@github.com/XaverianTeamRobotics/FtcRobotController.git
+        git push https://michaell4438:${{ secrets.PERSONAL_TOKEN }}@github.com/XaverianTeamRobotics/FtcRobotController.git
