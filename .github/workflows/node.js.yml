@@ -65,6 +65,7 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
+        directory: 'FtcRobotController'
         github_token: ${{ secrets.PERSONAL_TOKEN }}
         branch: master
         repository: "https://github.com/XaverianTeamRobotics/FtcRobotController"
