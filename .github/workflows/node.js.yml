@@ -63,8 +63,8 @@ jobs:
         git commit --allow-empty -m "Copy Site" ./HelpPage/apk/*
     
     - name: Push changes
-      run: |
-        cd FtcRobotController
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git push https://michaell4438:${{ secrets.PERSONAL_TOKEN }}@github.com/XaverianTeamRobotics/FtcRobotController.git
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.PERSONAL_TOKEN }}
+        branch: master
+        repository: "https://github.com/XaverianTeamRobotics/FtcRobotController"
