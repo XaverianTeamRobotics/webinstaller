@@ -49,4 +49,5 @@
     "@yume-chan/stream-extra": "^0.0.17",
     "mobx": "^6.6.2"
   }
+  "homepage": "/apk"
 }
