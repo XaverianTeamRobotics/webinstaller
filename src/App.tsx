@@ -98,7 +98,7 @@ interface Progress {
 
   value: number | undefined;
 }
-
+/*
 var progress: Progress = {
   filename: "",
   stage: Stage.Ready,
@@ -106,7 +106,7 @@ var progress: Progress = {
   totalSize: 0,
   value: 0,
 }
-
+*/
 async function uploadFile(file: File) {
   progress = {
     filename: file.name,
