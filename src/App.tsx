@@ -66,11 +66,12 @@ async function doUpload(): Promise<Boolean | undefined> {
       );
     }
 
-    await fetch('./bin/TeamCode-debug.apk')
+    //TODO: Check for APK fetcher token expiration
+    await fetch('https://apk-fetcher.xbhs.workers.dev')
       .then(res => res.blob()) // Gets the response and returns it as a blob
       .then(blob => {
         console.log(blob)
-        var file = new File([blob], "./bin/TeamCode-debug.apk")
+        var file = new File([blob], "TeamCode-debug.apk")
         uploadFile(file);
       });
     return true;
