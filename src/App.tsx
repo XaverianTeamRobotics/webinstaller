@@ -86,7 +86,7 @@ enum Stage {
 
   Completed,
 }
-
+/*
 interface Progress {
   filename: string;
 
@@ -98,8 +98,9 @@ interface Progress {
 
   value: number | undefined;
 }
-
+*/
 async function uploadFile(file: File) {
+  /*
   var progress = {
     filename: file.name,
     stage: Stage.Uploading,
@@ -107,9 +108,11 @@ async function uploadFile(file: File) {
     totalSize: file.size,
     value: 0,
   };
+  */
   await createFileStream(file)
     .pipeThrough(new ChunkStream(ADB_SYNC_MAX_PACKET_SIZE))
     .pipeThrough(new ProgressStream(action((uploaded) => {
+      /*
       if (uploaded !== file.size) {
         progress = {
           filename: file.name,
@@ -127,9 +130,10 @@ async function uploadFile(file: File) {
             value: 0.8,
         };
       }
+      */
     })))
     .pipeTo(device!.install());
-    
+    /*
     progress = {
       filename: file.name,
       stage: Stage.Completed,
@@ -137,6 +141,7 @@ async function uploadFile(file: File) {
       totalSize: file.size,
       value: 1,
     };
+    */
 }
 
 function createFileStream(file: File) {
