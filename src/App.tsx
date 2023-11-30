@@ -76,7 +76,7 @@ async function doUpload(): Promise<Boolean | undefined> {
     return true;
   } catch(e) {alert("An error occured. Please see the console to see the exact error."); console.error(e)}
 }
-
+/*
 enum Stage {
   Ready,
 
@@ -86,7 +86,7 @@ enum Stage {
 
   Completed,
 }
-/*
+
 interface Progress {
   filename: string;
 
