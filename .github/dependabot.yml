@@ -20,6 +20,9 @@ updates:
     allow:
       - dependency-name: '*'
         dependency-type: all
+    ignore:
+      # The web ADB library should not be automatically updated because it introduces breaking changes too often
+      - dependency-name: '@yume-chan/*'
     groups:
       patches:
         patterns:
