@@ -9,7 +9,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.5",
     "@types/react": "^18.2.67",
-    "@types/react-dom": "^18.2.22",
+    "@types/react-dom": "^18.2.24",
     "@yume-chan/adb": "^0.0.17",
     "@yume-chan/adb-backend-webusb": "^0.0.17",
     "@yume-chan/adb-credential-web": "^0.0.17",
