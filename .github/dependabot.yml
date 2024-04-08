@@ -5,11 +5,9 @@ updates:
     schedule:
       interval: daily
 
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-    ignore:
-      # The web ADB library should not be automatically updated because it introduces breaking changes too often
-      - dependency-name: '@yume-chan/*'
+# Uncomment this to re-enable automatic Node.js dependency updates
+#  - package-ecosystem: npm
+#    directory: /
+#    schedule:
+#      interval: weekly
+#      day: monday
