@@ -4,33 +4,12 @@ updates:
     directory: /
     schedule:
       interval: daily
-    allow:
-      - dependency-name: '*'
-        dependency-type: all
-    assignees:
-      - MatthewL246
-      - michaell4438
-    open-pull-requests-limit: 10
 
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
       day: monday
-    allow:
-      - dependency-name: '*'
-        dependency-type: all
     ignore:
       # The web ADB library should not be automatically updated because it introduces breaking changes too often
       - dependency-name: '@yume-chan/*'
-    groups:
-      patches:
-        patterns:
-          - '*'
-        update-types:
-          - minor
-          - patch
-    assignees:
-      - MatthewL246
-      - michaell4438
-    open-pull-requests-limit: 10
