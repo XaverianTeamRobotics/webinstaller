@@ -14,7 +14,7 @@
     "@yume-chan/adb-backend-webusb": "^0.0.17",
     "@yume-chan/adb-credential-web": "^0.0.17",
     "@yume-chan/stream-extra": "^0.0.17",
-    "mobx": "^6.12.0",
+    "mobx": "^6.12.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "mobx": "^6.12.0"
+    "mobx": "^6.12.3"
   },
   "homepage": "/webinstaller"
 }
